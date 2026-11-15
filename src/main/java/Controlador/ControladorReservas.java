@@ -5,17 +5,18 @@
 package Controlador;
 
 import Modelo.GestorHotel;
-import Modelo.Huesped;
 import Modelo.Habitacion;
+import Modelo.Huesped;
 import Modelo.Reserva;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  *
- * @author AsusVivobook
+ * @author HP I3
  */
 public class ControladorReservas {
+   
 
     private GestorHotel gestor;
 
@@ -88,3 +89,4 @@ public class ControladorReservas {
         return "No se pudo registrar la reserva";
     }
 }
+
