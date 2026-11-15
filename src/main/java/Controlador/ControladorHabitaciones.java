@@ -10,7 +10,7 @@ import Modelo.HabitacionFactory;
 
 /**
  *
- * @author AsusVivobook
+ * @author HP I3
  */
 public class ControladorHabitaciones {
 
@@ -53,3 +53,4 @@ public class ControladorHabitaciones {
         }
     }
 }
+
