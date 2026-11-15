@@ -8,9 +8,10 @@ import Modelo.GestorHotel;
 
 /**
  *
- * @author AsusVivobook
+ * @author HP I3
  */
 public class ControladorLogin {
+   
 
     private GestorHotel gestor;
 
@@ -45,3 +46,4 @@ public class ControladorLogin {
         gestor.setRecepcionistaActivo(null);
     }
 }
+
