@@ -7,6 +7,7 @@ package Hilos;
 import Modelo.GestorHotel;
 import Modelo.Reserva;
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
 /**
  *
@@ -15,46 +16,99 @@ import java.time.LocalDate;
 public class SupervisorReservas implements Runnable {
 
     private GestorHotel gestor;
+    private Consumer<String> mostrarMensaje;
+    private Consumer<int[]> actualizarDatos;
 
     public SupervisorReservas() {
         gestor = GestorHotel.getInstancia();
     }
 
+    public SupervisorReservas(Consumer<String> mensaje,
+            Consumer<int[]> datos) {
+
+        gestor = GestorHotel.getInstancia();
+        mostrarMensaje = mensaje;
+        actualizarDatos = datos;
+    }
+
     @Override
     public void run() {
 
-        System.out.println("Supervisor de reservas iniciado");
+        enviarMensaje("Supervisor de reservas iniciado");
 
         for (int i = 1; i <= 5; i++) {
 
+            int revisadas;
+            int vencidas = 0;
+            int confirmadas = 0;
+
             synchronized (gestor) {
 
-                for (Reserva r : gestor.getReservas()) {
+                java.util.List<Reserva> reservas = gestor.getReservas();
+
+                revisadas = reservas.size();
+
+                for (Reserva r : reservas) {
 
                     if (r.getEstado().equals("Confirmada")
                             && r.getFechaEntrada().isBefore(LocalDate.now())) {
 
                         r.setEstado("Vencida");
+                        vencidas++;
 
-                        System.out.println(
-                                "Reserva " + r.getCodigo() + " vencida");
+                        enviarMensaje("Reserva "
+                                + r.getCodigo() + " vencida");
+                    }
+
+                    if (r.getEstado().equals("Vencida")) {
+                        // Contabilizar reservas vencidas
+                    }
+
+                    if (r.getEstado().equals("Confirmada")) {
+                        confirmadas++;
+                    }
+                }
+
+                vencidas = 0;
+
+                for (Reserva r : reservas) {
+                    if (r.getEstado().equals("Vencida")) {
+                        vencidas++;
                     }
                 }
             }
 
-            System.out.println("Supervisor: ciclo " + i + " completado");
+            enviarDatos(new int[]{
+                revisadas,
+                vencidas,
+                confirmadas
+            });
+
+            enviarMensaje("Ciclo " + i + " completado");
 
             if (i < 5) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    System.out.println("Supervisor interrumpido");
+                    enviarMensaje("Supervisor interrumpido");
                     return;
                 }
             }
         }
 
-        System.out.println("Supervisor de reservas finalizado");
+        enviarMensaje("Supervisor de reservas finalizado");
+    }
+
+    private void enviarMensaje(String mensaje) {
+        if (mostrarMensaje != null) {
+            mostrarMensaje.accept(mensaje);
+        }
+    }
+
+    private void enviarDatos(int[] datos) {
+        if (actualizarDatos != null) {
+            actualizarDatos.accept(datos);
+        }
     }
 }
