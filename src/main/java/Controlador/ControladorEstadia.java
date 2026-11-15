@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 /**
  *
- * @author AsusVivobook
+ * @author HP I3
  */
 public class ControladorEstadia {
 
@@ -62,4 +62,7 @@ public class ControladorEstadia {
 
         return "No se encontró la reserva";
     }
-}
+    
+    
+ }
+
