@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author AsusVivobook
+ * @author HP I3
  */
 public class ControladorDisponibilidad {
 
@@ -86,3 +86,4 @@ public class ControladorDisponibilidad {
                 habitaciones, fecha, indice + 1);
     }
 }
+
