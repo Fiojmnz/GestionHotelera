@@ -9,9 +9,10 @@ import Modelo.Huesped;
 
 /**
  *
- * @author AsusVivobook
+ * @author HP I3
  */
 public class ControladorHuespedes {
+   
 
     private GestorHotel gestor;
 
@@ -50,3 +51,4 @@ public class ControladorHuespedes {
         }
     }
 }
+
