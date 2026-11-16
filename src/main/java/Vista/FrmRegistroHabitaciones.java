@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmRegistroHabitaciones extends javax.swing.JFrame {
 
+    private Controlador.ControladorHabitaciones controlador = new Controlador.ControladorHabitaciones();
+
     /**
      * Creates new form FrmRegistroHabitaciones
      */
@@ -192,46 +194,19 @@ public class FrmRegistroHabitaciones extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbTipoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        String numeroTexto = txtNumero.getText().trim();
+        String numero = txtNumero.getText().trim();
+        String tipo = cmbTipo.getSelectedItem().toString();
 
-        if (numeroTexto.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Debe ingresar el número de habitación");
-            return;
-        }
+        String resultado = controlador.registrarHabitacion(numero, tipo);
 
-        try {
+        if (resultado.equals("Habitación registrada correctamente")) {
 
-            int numero = Integer.parseInt(numeroTexto);
+            javax.swing.JOptionPane.showMessageDialog(this, resultado);
 
-            if (numero <= 0) {
-                JOptionPane.showMessageDialog(this,
-                        "El número debe ser mayor que cero");
-                return;
-            }
-
-            DefaultTableModel modelo
-                    = (DefaultTableModel) tablaHabitaciones.getModel();
-
-            for (int i = 0; i < modelo.getRowCount(); i++) {
-
-                Object valor = modelo.getValueAt(i, 0);
-
-                if (valor != null && !valor.toString().trim().isEmpty()) {
-
-                    int existente = Integer.parseInt(valor.toString());
-
-                    if (existente == numero) {
-                        JOptionPane.showMessageDialog(this,
-                                "Ya existe una habitación con ese número");
-                        return;
-                    }
-                }
-            }
-
-            String tipo = cmbTipo.getSelectedItem().toString();
-            String capacidad = txtCapacidad.getText();
+            int capacidad = Integer.parseInt(txtCapacidad.getText());
             String tarifa = txtTarifa.getText();
+
+            javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tablaHabitaciones.getModel();
 
             modelo.addRow(new Object[]{
                 numero,
@@ -240,17 +215,11 @@ public class FrmRegistroHabitaciones extends javax.swing.JFrame {
                 "₡" + tarifa
             });
 
-            JOptionPane.showMessageDialog(this,
-                    "¡Habitación registrada correctamente!");
-
             txtNumero.setText("");
             txtNumero.requestFocus();
 
-        } catch (NumberFormatException e) {
-
-            JOptionPane.showMessageDialog(this,
-                    "Ingrese un número de habitación válido");
-
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, resultado);
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
