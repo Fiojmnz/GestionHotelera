@@ -8,7 +8,7 @@ import Modelo.GestorHotel;
 import Modelo.Habitacion;
 import Modelo.Reserva;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  *
@@ -17,9 +17,15 @@ import java.util.ArrayList;
 public class ActualizadorIndicadores implements Runnable {
 
     private GestorHotel gestor;
+    private Consumer<int[]> actualizarDatos;
 
     public ActualizadorIndicadores() {
         gestor = GestorHotel.getInstancia();
+    }
+
+    public ActualizadorIndicadores(Consumer<int[]> actualizarDatos) {
+        gestor = GestorHotel.getInstancia();
+        this.actualizarDatos = actualizarDatos;
     }
 
     @Override
@@ -28,6 +34,8 @@ public class ActualizadorIndicadores implements Runnable {
         System.out.println("Actualizador de indicadores iniciado");
 
         for (int i = 1; i <= 5; i++) {
+
+            int[] datos;
 
             synchronized (gestor) {
 
@@ -44,6 +52,7 @@ public class ActualizadorIndicadores implements Runnable {
 
                         if (r.getHabitacion().getNumero() == h.getNumero()
                                 && r.getEstado().equals("Hospedado")) {
+
                             ocupadas++;
                             break;
                         }
@@ -61,9 +70,9 @@ public class ActualizadorIndicadores implements Runnable {
                     }
                 }
 
-                long ingresos = calcularIngresos(reservas, 0);
-
                 int desocupadas = habitaciones.size() - ocupadas;
+
+                long ingresos = calcularIngresos(reservas, 0);
 
                 System.out.println("----- INDICADORES DEL HOTEL -----");
                 System.out.println("Total de habitaciones: " + habitaciones.size());
@@ -72,6 +81,18 @@ public class ActualizadorIndicadores implements Runnable {
                 System.out.println("Reservas confirmadas: " + confirmadas);
                 System.out.println("Reservas vencidas: " + vencidas);
                 System.out.println("Ingresos esperados: ₡" + ingresos);
+
+                datos = new int[]{
+                    habitaciones.size(),
+                    ocupadas,
+                    desocupadas,
+                    confirmadas,
+                    vencidas
+                };
+            }
+
+            if (actualizarDatos != null) {
+                actualizarDatos.accept(datos);
             }
 
             System.out.println("Indicadores: ciclo " + i + " completado");
