@@ -140,10 +140,15 @@ public class FrmSimulacionVencimientos extends javax.swing.JFrame {
 
                             txtActividad.append(mensaje + "\n");
 
-                            if (mensaje.startsWith("Simulación finalizada")
-                                    || mensaje.startsWith("Simulación interrumpida")) {
+                            if (mensaje.startsWith("Simulación finalizada")) {
 
                                 lblEstado.setText("Simulación finalizada");
+                                btnIniciar.setEnabled(true);
+                            }
+
+                            if (mensaje.startsWith("Simulación interrumpida")) {
+
+                                lblEstado.setText("Simulación interrumpida");
                                 btnIniciar.setEnabled(true);
                             }
                         }),
