@@ -88,5 +88,27 @@ public class ControladorReservas {
 
         return "No se pudo registrar la reserva";
     }
+    
+    public List<Huesped> obtenerHuespedes(){
+        return gestor.getHuespedes();
+    }
+    
+    public List<Habitacion> obtenerHabitaciones(){
+        return gestor.getHabitaciones();
+    }
+    public List<Reserva> obtenerReservas(){
+        return gestor.getReservas();
+    }
+    
+    
+    public String obtenerUltimoCodigo() {
+    List<Reserva> reservas = gestor.getReservas();
+
+    if (reservas.isEmpty()) {
+        return "";
+    }
+
+    return reservas.get(reservas.size() - 1).getCodigo();
+}
 }
 

@@ -50,5 +50,10 @@ public class ControladorHuespedes {
             return "La identificación ya está registrada";
         }
     }
+    
+    public java.util.List<Huesped> obtenerHuespedes() {
+    return gestor.getHuespedes();
 }
+}
+
 
