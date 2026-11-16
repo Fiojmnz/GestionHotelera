@@ -16,6 +16,8 @@ public class FrmGestionEstadias extends javax.swing.JFrame {
 
     private Modelo.Reserva reservaEncontrada;
 
+    private Controlador.ControladorEstadia controlador = new Controlador.ControladorEstadia();
+
     /**
      * Creates new form FrmGestionEstadias
      */
@@ -73,8 +75,18 @@ public class FrmGestionEstadias extends javax.swing.JFrame {
         jLabel7.setText("\tFecha de salida");
 
         btnCheckIn.setText("\tRealizar Check-in");
+        btnCheckIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckInActionPerformed(evt);
+            }
+        });
 
         btnCheckOut.setText("\tRealizar Check-out");
+        btnCheckOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckOutActionPerformed(evt);
+            }
+        });
 
         lblDatoHuesped.setText("Sin información");
 
@@ -122,9 +134,9 @@ public class FrmGestionEstadias extends javax.swing.JFrame {
                                 .addGap(1, 1, 1)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(24, 24, 24))
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(45, 45, 45)
@@ -133,9 +145,7 @@ public class FrmGestionEstadias extends javax.swing.JFrame {
                                     .addComponent(lblDatoEntrada)
                                     .addComponent(lblDatoEstado)
                                     .addComponent(lblDatoHabitacion)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblDatoSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lblDatoSalida, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(204, 204, 204)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -232,6 +242,40 @@ public class FrmGestionEstadias extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this,
                 "Reserva encontrada correctamente");
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnCheckInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckInActionPerformed
+        if (reservaEncontrada == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Primero debe buscar una reserva");
+            return;
+        }
+
+        String resultado = controlador.realizarCheckIn(
+                reservaEncontrada.getCodigo());
+
+        JOptionPane.showMessageDialog(this, resultado);
+
+        if (resultado.equals("Check-in realizado correctamente")) {
+            lblDatoEstado.setText("Hospedado");
+        }
+    }//GEN-LAST:event_btnCheckInActionPerformed
+
+    private void btnCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckOutActionPerformed
+        if (reservaEncontrada == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Primero debe buscar una reserva");
+            return;
+        }
+
+        String resultado = controlador.realizarCheckOut(
+                reservaEncontrada.getCodigo());
+
+        JOptionPane.showMessageDialog(this, resultado);
+
+        if (resultado.equals("Check-out realizado correctamente")) {
+            lblDatoEstado.setText("Finalizada");
+        }
+    }//GEN-LAST:event_btnCheckOutActionPerformed
 
     /**
      * @param args the command line arguments
