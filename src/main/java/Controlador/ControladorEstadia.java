@@ -7,6 +7,7 @@ package Controlador;
 import Modelo.GestorHotel;
 import Modelo.Reserva;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -22,21 +23,26 @@ public class ControladorEstadia {
 
     public String realizarCheckIn(String codigo) {
 
-        for (Reserva r : gestor.getReservas()) {
+        synchronized (gestor) {
 
-            if (r.getCodigo().equals(codigo)) {
+            List<Reserva> reservas = gestor.getReservas();
 
-                if (!r.getEstado().equals("Confirmada")) {
-                    return "La reserva no está confirmada";
+            for (Reserva r : reservas) {
+
+                if (r.getCodigo().equals(codigo)) {
+
+                    if (!r.getEstado().equals("Confirmada")) {
+                        return "La reserva no está confirmada";
+                    }
+
+                    if (!r.getFechaEntrada().equals(LocalDate.now())) {
+                        return "El check-in solo se permite en la fecha de entrada";
+                    }
+
+                    r.setEstado("Hospedado");
+
+                    return "Check-in realizado correctamente";
                 }
-
-                if (!r.getFechaEntrada().equals(LocalDate.now())) {
-                    return "El check-in solo se permite en la fecha de entrada";
-                }
-
-                r.setEstado("Hospedado");
-
-                return "Check-in realizado correctamente";
             }
         }
 
@@ -45,24 +51,26 @@ public class ControladorEstadia {
 
     public String realizarCheckOut(String codigo) {
 
-        for (Reserva r : gestor.getReservas()) {
+        synchronized (gestor) {
 
-            if (r.getCodigo().equals(codigo)) {
+            List<Reserva> reservas = gestor.getReservas();
 
-                if (!r.getEstado().equals("Hospedado")) {
-                    return "La reserva no se encuentra hospedada";
+            for (Reserva r : reservas) {
+
+                if (r.getCodigo().equals(codigo)) {
+
+                    if (!r.getEstado().equals("Hospedado")) {
+                        return "La reserva no se encuentra hospedada";
+                    }
+
+                    r.setFechaSalidaReal(LocalDate.now());
+                    r.setEstado("Finalizada");
+
+                    return "Check-out realizado correctamente";
                 }
-
-                r.setFechaSalidaReal(LocalDate.now());
-                r.setEstado("Finalizada");
-
-                return "Check-out realizado correctamente";
             }
         }
 
         return "No se encontró la reserva";
     }
-    
-    
- }
-
+}

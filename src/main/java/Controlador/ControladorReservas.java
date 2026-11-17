@@ -16,7 +16,6 @@ import java.util.List;
  * @author HP I3
  */
 public class ControladorReservas {
-   
 
     private GestorHotel gestor;
 
@@ -52,63 +51,66 @@ public class ControladorReservas {
             return "La habitación no tiene capacidad suficiente";
         }
 
-        List<Reserva> reservas = gestor.getReservas();
+        synchronized (gestor) {
 
-        for (Reserva r : reservas) {
+            List<Reserva> reservas = gestor.getReservas();
 
-            if (r.getHabitacion().getNumero() == habitacion.getNumero()
-                    && (r.getEstado().equals("Confirmada")
-                    || r.getEstado().equals("Hospedado"))) {
+            for (Reserva r : reservas) {
 
-                boolean seSuperpone
-                        = entrada.isBefore(r.getFechaSalida())
-                        && salida.isAfter(r.getFechaEntrada());
+                if (r.getHabitacion().getNumero() == habitacion.getNumero()
+                        && (r.getEstado().equals("Confirmada")
+                        || r.getEstado().equals("Hospedado"))) {
 
-                if (seSuperpone) {
-                    return "La habitación no está disponible en esas fechas";
+                    boolean seSuperpone
+                            = entrada.isBefore(r.getFechaSalida())
+                            && salida.isAfter(r.getFechaEntrada());
+
+                    if (seSuperpone) {
+                        return "La habitación no está disponible en esas fechas";
+                    }
                 }
             }
+
+            String codigo = "RES" + (reservas.size() + 1);
+
+            Reserva reserva = new Reserva(
+                    codigo,
+                    huesped,
+                    habitacion,
+                    personas,
+                    entrada,
+                    salida,
+                    gestor.getRecepcionistaActivo()
+            );
+
+            if (gestor.agregarReserva(reserva)) {
+                return "Reserva registrada correctamente. Código: " + codigo;
+            }
+
+            return "No se pudo registrar la reserva";
         }
-
-        String codigo = "RES" + (reservas.size() + 1);
-
-        Reserva reserva = new Reserva(
-                codigo,
-                huesped,
-                habitacion,
-                personas,
-                entrada,
-                salida,
-                gestor.getRecepcionistaActivo()
-        );
-
-        if (gestor.agregarReserva(reserva)) {
-            return "Reserva registrada correctamente. Código: " + codigo;
-        }
-
-        return "No se pudo registrar la reserva";
     }
-    
-    public List<Huesped> obtenerHuespedes(){
+
+    public List<Huesped> obtenerHuespedes() {
         return gestor.getHuespedes();
     }
-    
-    public List<Habitacion> obtenerHabitaciones(){
+
+    public List<Habitacion> obtenerHabitaciones() {
         return gestor.getHabitaciones();
     }
-    public List<Reserva> obtenerReservas(){
+
+    public List<Reserva> obtenerReservas() {
         return gestor.getReservas();
     }
-    
-    
+
     public String obtenerUltimoCodigo() {
-    List<Reserva> reservas = gestor.getReservas();
 
-    if (reservas.isEmpty()) {
-        return "";
+        List<Reserva> reservas = gestor.getReservas();
+
+        if (reservas.isEmpty()) {
+            return "";
+        }
+
+        return reservas.get(reservas.size() - 1).getCodigo();
     }
-
-    return reservas.get(reservas.size() - 1).getCodigo();
 }
-}
-

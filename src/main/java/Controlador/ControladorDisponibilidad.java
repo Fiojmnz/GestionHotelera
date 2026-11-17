@@ -31,11 +31,14 @@ public class ControladorDisponibilidad {
             return disponibles;
         }
 
-        List<Habitacion> habitaciones = gestor.getHabitaciones();
+        synchronized (gestor) {
 
-        for (Habitacion h : habitaciones) {
-            if (estaDisponible(h, fecha)) {
-                disponibles.add(h);
+            List<Habitacion> habitaciones = gestor.getHabitaciones();
+
+            for (Habitacion h : habitaciones) {
+                if (estaDisponible(h, fecha)) {
+                    disponibles.add(h);
+                }
             }
         }
 
@@ -64,9 +67,16 @@ public class ControladorDisponibilidad {
 
     public int contarDisponibles(LocalDate fecha) {
 
-        List<Habitacion> habitaciones = gestor.getHabitaciones();
+        if (fecha == null) {
+            return 0;
+        }
 
-        return contarRecursivo(habitaciones, fecha, 0);
+        synchronized (gestor) {
+
+            List<Habitacion> habitaciones = gestor.getHabitaciones();
+
+            return contarRecursivo(habitaciones, fecha, 0);
+        }
     }
 
     private int contarRecursivo(List<Habitacion> habitaciones,
@@ -86,4 +96,3 @@ public class ControladorDisponibilidad {
                 habitaciones, fecha, indice + 1);
     }
 }
-
