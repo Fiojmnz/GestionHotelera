@@ -7,6 +7,7 @@ package Hilos;
 import Modelo.GestorHotel;
 import Modelo.Reserva;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -44,7 +45,7 @@ public class SupervisorReservas implements Runnable {
 
             synchronized (gestor) {
 
-                java.util.List<Reserva> reservas = gestor.getReservas();
+                List<Reserva> reservas = gestor.getReservas();
 
                 revisadas = reservas.size();
 
@@ -54,26 +55,20 @@ public class SupervisorReservas implements Runnable {
                             && r.getFechaEntrada().isBefore(LocalDate.now())) {
 
                         r.setEstado("Vencida");
-                        vencidas++;
 
                         enviarMensaje("Reserva "
                                 + r.getCodigo() + " vencida");
                     }
+                }
+
+                for (Reserva r : reservas) {
 
                     if (r.getEstado().equals("Vencida")) {
-                        // Contabilizar reservas vencidas
+                        vencidas++;
                     }
 
                     if (r.getEstado().equals("Confirmada")) {
                         confirmadas++;
-                    }
-                }
-
-                vencidas = 0;
-
-                for (Reserva r : reservas) {
-                    if (r.getEstado().equals("Vencida")) {
-                        vencidas++;
                     }
                 }
             }
@@ -89,6 +84,7 @@ public class SupervisorReservas implements Runnable {
             if (i < 5) {
                 try {
                     Thread.sleep(1000);
+
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     enviarMensaje("Supervisor interrumpido");
