@@ -15,75 +15,78 @@ import Modelo.Reserva;
  * @author HP I3
  */
 public class FrmRegistroReserva extends javax.swing.JFrame {
-    
+
     private ControladorReservas controlador;
-    
-    
 
     /**
      * Creates new form FrmRegistroReserva
      */
     public FrmRegistroReserva() {
         initComponents();
+
         txtCodigo.setEditable(false);
         txtCodigo.setText("Automático");
-        
-       txtRecepcionista.setEditable(false);
-       txtRecepcionista.setText("recepcion1");
-       txtRecepcionista.setText(
-    Modelo.GestorHotel.getInstancia().getRecepcionistaActivo()
-);txtRecepcionista.setEditable(false);
-       
-        
+
+        txtPersonas.setText("");
+        txtPersonas.setToolTipText("Ingrese la cantidad de personas");
+
+        txtRecepcionista.setEditable(false);
+        txtRecepcionista.setText("recepcion1");
+
+        txtRecepcionista.setText(
+                Modelo.GestorHotel.getInstancia().getRecepcionistaActivo()
+        );
+
+        txtRecepcionista.setEditable(false);
+
         controlador = new ControladorReservas();
-        
+
         cargarHuespedes();
         cargarHabitaciones();
         cargarTablaReservas();
     }
+
     private void cargarHuespedes() {
-    cmbHuesped.removeAllItems();
+        cmbHuesped.removeAllItems();
 
-    for (Huesped h : controlador.obtenerHuespedes()) {
-        cmbHuesped.addItem(h.getCedula() + "-" + h.getNombre());
+        for (Huesped h : controlador.obtenerHuespedes()) {
+            cmbHuesped.addItem(h.getCedula() + "-" + h.getNombre());
+        }
     }
-}
 
-private void cargarHabitaciones() {
-    cmbHabitacion.removeAllItems();
+    private void cargarHabitaciones() {
+        cmbHabitacion.removeAllItems();
 
-    for (Habitacion h : controlador.obtenerHabitaciones()) {
-        cmbHabitacion.addItem("habitacion" +  h.getNumero());
+        for (Habitacion h : controlador.obtenerHabitaciones()) {
+            cmbHabitacion.addItem("habitacion" + h.getNumero());
+        }
     }
-}
-    
-    
+
     private void cargarTablaReservas() {
 
-    DefaultTableModel modelo =
-            (DefaultTableModel) tablaReservas.getModel();
+        DefaultTableModel modelo
+                = (DefaultTableModel) tablaReservas.getModel();
 
-    modelo.setRowCount(0);
+        modelo.setRowCount(0);
 
-    for (Reserva r : controlador.obtenerReservas()) {
+        for (Reserva r : controlador.obtenerReservas()) {
 
-        Object[] fila = {
-            r.getCodigo(),
-            r.getHuesped().getNombre(),
-            r.getHabitacion().getNumero(),
-            r.getCantidadPersonas(),
-            r.getFechaEntrada(),
-            r.getFechaSalida(),
-            r.getNoches(),
-            r.getMontoTotal(),
-            r.getEstado(),
-            r.getRecepcionista()
-        };
+            Object[] fila = {
+                r.getCodigo(),
+                r.getHuesped().getNombre(),
+                r.getHabitacion().getNumero(),
+                r.getCantidadPersonas(),
+                r.getFechaEntrada(),
+                r.getFechaSalida(),
+                r.getNoches(),
+                r.getMontoTotal(),
+                r.getEstado(),
+                r.getRecepcionista()
+            };
 
-        modelo.addRow(fila);
+            modelo.addRow(fila);
+        }
     }
-}
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -116,8 +119,6 @@ private void cargarHabitaciones() {
         txtRecepcionista = new javax.swing.JTextField();
         lblNoches = new javax.swing.JLabel();
         lblImporte = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
 
@@ -153,6 +154,11 @@ private void cargarHabitaciones() {
         txtPersonas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPersonasActionPerformed(evt);
+            }
+        });
+        txtPersonas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPersonasKeyTyped(evt);
             }
         });
 
@@ -202,8 +208,6 @@ private void cargarHabitaciones() {
         lblNoches.setText("Noches: 0");
 
         lblImporte.setText("Importe: 0");
-
-        jLabel12.setText("Recepcionista");
 
         jLabel13.setText("Estado:");
 
@@ -259,12 +263,10 @@ private void cargarHabitaciones() {
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblNoches, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel12)
                     .addComponent(jLabel13))
                 .addGap(57, 57, 57)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cmbEstado, 0, 100, Short.MAX_VALUE)
-                    .addComponent(jTextField3)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtCodigo)
@@ -320,10 +322,7 @@ private void cargarHabitaciones() {
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtFechaSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtFechaSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 6, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -343,203 +342,250 @@ private void cargarHabitaciones() {
 
     private void cmbHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHabitacionActionPerformed
         try {
-    if (cmbHabitacion.getSelectedIndex() == -1) {
-        return;
-    }
+            if (cmbHabitacion.getSelectedIndex() == -1) {
+                return;
+            }
 
-    java.time.LocalDate entrada =
-            java.time.LocalDate.parse(txtFechaEntrada.getText().trim());
+            java.time.LocalDate entrada
+                    = java.time.LocalDate.parse(txtFechaEntrada.getText().trim());
 
-    java.time.LocalDate salida =
-            java.time.LocalDate.parse(txtFechaSalida.getText().trim());
+            java.time.LocalDate salida
+                    = java.time.LocalDate.parse(txtFechaSalida.getText().trim());
 
-    if (!salida.isAfter(entrada)) {
-        return;
-    }
+            if (!salida.isAfter(entrada)) {
+                return;
+            }
 
-    long noches = java.time.temporal.ChronoUnit.DAYS.between(
-            entrada, salida);
+            long noches = java.time.temporal.ChronoUnit.DAYS.between(
+                    entrada, salida);
 
-    String seleccion = cmbHabitacion.getSelectedItem().toString();
+            String seleccion = cmbHabitacion.getSelectedItem().toString();
 
-    int numero = Integer.parseInt(
-            seleccion.replace("Habitación ", ""));
+            int numero = Integer.parseInt(
+                    seleccion.replace("Habitación ", ""));
 
-    for (Habitacion h : controlador.obtenerHabitaciones()) {
-        if (h.getNumero() == numero) {
-            long importe = noches * h.getTarifa();
+            for (Habitacion h : controlador.obtenerHabitaciones()) {
+                if (h.getNumero() == numero) {
+                    long importe = noches * h.getTarifa();
 
-            lblNoches.setText(String.valueOf(noches));
-            lblImporte.setText("₡" + importe);
-            break;
+                    lblNoches.setText(String.valueOf(noches));
+                    lblImporte.setText("₡" + importe);
+                    break;
+                }
+            }
+
+        } catch (Exception e) {
+            lblNoches.setText("0");
+            lblImporte.setText("₡0");
         }
-    }
-
-} catch (Exception e) {
-    lblNoches.setText("0");
-    lblImporte.setText("₡0");
-}
     }//GEN-LAST:event_cmbHabitacionActionPerformed
 
     private void txtFechaEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaEntradaActionPerformed
-    txtFechaSalidaActionPerformed(evt); 
-    
+        txtFechaSalidaActionPerformed(evt);
+
     }//GEN-LAST:event_txtFechaEntradaActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
- txtFechaEntrada.setText("");
-txtPersonas.setText("");
-txtFechaSalida.setText("");
+        txtFechaEntrada.setText("");
+        txtPersonas.setText("");
+        txtFechaSalida.setText("");
 
-cmbHuesped.setSelectedIndex(-1);
-cmbHabitacion.setSelectedIndex(-1);
+        cmbHuesped.setSelectedIndex(-1);
+        cmbHabitacion.setSelectedIndex(-1);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+
         try {
 
-        if (cmbHuesped.getSelectedIndex() == -1
-                || cmbHabitacion.getSelectedIndex() == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Debe seleccionar un huésped y una habitación");
-            return;
-        }
+            if (cmbHuesped.getSelectedIndex() == -1
+                    || cmbHabitacion.getSelectedIndex() == -1) {
 
-        String cedula = cmbHuesped.getSelectedItem()
-                .toString().split(" - ")[0];
-
-        int numeroHabitacion = Integer.parseInt(
-                cmbHabitacion.getSelectedItem()
-                        .toString().replace("Habitación ", ""));
-
-        Huesped huespedSeleccionado = null;
-        Habitacion habitacionSeleccionada = null;
-
-        for (Huesped h : controlador.obtenerHuespedes()) {
-            if (h.getCedula().equals(cedula)) {
-                huespedSeleccionado = h;
-                break;
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Debe seleccionar un huésped y una habitación");
+                return;
             }
-        }
 
-        for (Habitacion h : controlador.obtenerHabitaciones()) {
-            if (h.getNumero() == numeroHabitacion) {
-                habitacionSeleccionada = h;
-                break;
+            
+            String textoHuesped
+                    = cmbHuesped.getSelectedItem().toString();
+
+            String cedula = textoHuesped.substring(
+                    0, textoHuesped.indexOf("-")).trim();
+            
+           
+            String textoHabitacion
+                    = cmbHabitacion.getSelectedItem().toString();
+
+            String soloNumero = textoHabitacion.replaceAll("\\D+", "");
+
+            if (soloNumero.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(
+                        this, "No se pudo identificar la habitación");
+                return;
             }
+
+            int numeroHabitacion = Integer.parseInt(soloNumero);
+
+           
+            Huesped huespedSeleccionado = null;
+            Habitacion habitacionSeleccionada = null;
+
+            for (Huesped h : controlador.obtenerHuespedes()) {
+                if (h.getCedula().equals(cedula)) {
+                    huespedSeleccionado = h;
+                    break;
+                }
+            }
+
+            for (Habitacion h : controlador.obtenerHabitaciones()) {
+                if (h.getNumero() == numeroHabitacion) {
+                    habitacionSeleccionada = h;
+                    break;
+                }
+            }
+
+            if (huespedSeleccionado == null
+                    || habitacionSeleccionada == null) {
+
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "No se encontró el huésped o la habitación");
+                return;
+            }
+
+            
+            int personas = Integer.parseInt(
+                    txtPersonas.getText().trim());
+
+            if (personas <= 0) {
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "La cantidad de personas debe ser mayor que cero");
+                return;
+            }
+
+            
+            java.time.LocalDate entrada
+                    = java.time.LocalDate.parse(
+                            txtFechaEntrada.getText().trim());
+
+            java.time.LocalDate salida
+                    = java.time.LocalDate.parse(
+                            txtFechaSalida.getText().trim());
+
+            if (!salida.isAfter(entrada)) {
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "La fecha de salida debe ser posterior a la entrada");
+                return;
+            }
+
+           
+            String resultado = controlador.registrarReserva(
+                    huespedSeleccionado,
+                    habitacionSeleccionada,
+                    personas,
+                    entrada,
+                    salida
+            );
+
+            if (resultado.startsWith(
+                    "Reserva registrada correctamente")) {
+
+                cargarTablaReservas();
+                txtCodigo.setText(controlador.obtenerUltimoCodigo());
+            }
+
+            javax.swing.JOptionPane.showMessageDialog(this, resultado);
+
+        } catch (NumberFormatException e) {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Ingrese una cantidad de personas válida");
+
+        } catch (java.time.format.DateTimeParseException e) {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Las fechas deben tener formato AAAA-MM-DD");
         }
 
-        if (huespedSeleccionado == null
-                || habitacionSeleccionada == null) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "No se encontró el huésped o la habitación");
-            return;
-        }
 
-        int personas = Integer.parseInt(txtPersonas.getText().trim());
-
-        if (personas <= 0) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "La cantidad de personas debe ser mayor que cero");
-            return;
-        }
-
-        java.time.LocalDate entrada =
-                java.time.LocalDate.parse(txtFechaEntrada.getText().trim());
-
-        java.time.LocalDate salida =
-                java.time.LocalDate.parse(txtFechaSalida.getText().trim());
-
-        String resultado = controlador.registrarReserva(
-                huespedSeleccionado,
-                habitacionSeleccionada,
-                personas,
-                entrada,
-                salida
-        );
-
-        if (resultado.startsWith("Reserva registrada correctamente")) {
-            cargarTablaReservas();
-            txtCodigo.setText(controlador.obtenerUltimoCodigo());
-        }
-
-        javax.swing.JOptionPane.showMessageDialog(this, resultado);
-
-    } catch (NumberFormatException e) {
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Ingrese una cantidad de personas válida");
-
-    } catch (java.time.format.DateTimeParseException e) {
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Las fechas deben tener formato AAAA-MM-DD");
-    }
-        
-        
-        
-        
-
-        
-       
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void txtPersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPersonasActionPerformed
-        // TODO add your handling code here:
+        //
     }//GEN-LAST:event_txtPersonasActionPerformed
 
     private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
-       cmbEstado.setSelectedIndex(0);
+        cmbEstado.setSelectedIndex(0);
     }//GEN-LAST:event_cmbEstadoActionPerformed
 
     private void txtFechaSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaSalidaActionPerformed
-      try {
-    java.time.LocalDate entrada =
-            java.time.LocalDate.parse(txtFechaEntrada.getText().trim());
+        try {
+            java.time.LocalDate entrada
+                    = java.time.LocalDate.parse(txtFechaEntrada.getText().trim());
 
-    java.time.LocalDate salida =
-            java.time.LocalDate.parse(txtFechaSalida.getText().trim());
+            java.time.LocalDate salida
+                    = java.time.LocalDate.parse(txtFechaSalida.getText().trim());
 
-    if (salida.isAfter(entrada)) {
-        long noches = java.time.temporal.ChronoUnit.DAYS.between(
-                entrada, salida);
+            if (salida.isAfter(entrada)) {
+                long noches = java.time.temporal.ChronoUnit.DAYS.between(
+                        entrada, salida);
 
-        lblNoches.setText(String.valueOf(noches));
-        
-        if (cmbHabitacion.getSelectedItem() != null) {
+                lblNoches.setText(String.valueOf(noches));
 
-    String seleccion = cmbHabitacion.getSelectedItem().toString();
+                if (cmbHabitacion.getSelectedItem() != null) {
 
-    int numero = Integer.parseInt(
-            seleccion.replace("Habitación ", ""));
+                    String seleccion = cmbHabitacion.getSelectedItem().toString();
 
-    for (Habitacion h : controlador.obtenerHabitaciones()) {
+                    int numero = Integer.parseInt(
+                            seleccion.replace("Habitación ", ""));
 
-        if (h.getNumero() == numero) {
+                    for (Habitacion h : controlador.obtenerHabitaciones()) {
 
-            long importe = noches * h.getTarifa();
+                        if (h.getNumero() == numero) {
 
-            lblImporte.setText("₡" + importe);
+                            long importe = noches * h.getTarifa();
 
-            break;
+                            lblImporte.setText("₡" + importe);
+
+                            break;
+                        }
+                    }
+                }
+            } else {
+                lblNoches.setText("0");
+                javax.swing.JOptionPane.showMessageDialog(
+                        this, "La fecha de salida debe ser posterior a la entrada");
+            }
+
+        } catch (java.time.format.DateTimeParseException e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this, "Ingrese las fechas en formato AAAA-MM-DD");
         }
-    }
-}
-    } else {
-        lblNoches.setText("0");
-        javax.swing.JOptionPane.showMessageDialog(
-                this, "La fecha de salida debe ser posterior a la entrada");
-    }
 
-} catch (java.time.format.DateTimeParseException e) {
-    javax.swing.JOptionPane.showMessageDialog(
-            this, "Ingrese las fechas en formato AAAA-MM-DD");
-}
-      
-      
+
     }//GEN-LAST:event_txtFechaSalidaActionPerformed
 
     private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoActionPerformed
+
+    private void txtPersonasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPersonasKeyTyped
+        char caracter = evt.getKeyChar();
+
+        if (!Character.isDigit(caracter)) {
+            evt.consume();
+        }
+
+        if (txtPersonas.getText().length() >= 2) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPersonasKeyTyped
 
     /**
      * @param args the command line arguments
@@ -583,7 +629,6 @@ cmbHabitacion.setSelectedIndex(-1);
     private javax.swing.JComboBox<String> cmbHabitacion;
     private javax.swing.JComboBox<String> cmbHuesped;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -594,7 +639,6 @@ cmbHabitacion.setSelectedIndex(-1);
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lblImporte;
     private javax.swing.JLabel lblNoches;
     private javax.swing.JTable tablaReservas;
