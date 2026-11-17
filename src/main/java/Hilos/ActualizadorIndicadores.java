@@ -17,13 +17,13 @@ import java.util.function.Consumer;
 public class ActualizadorIndicadores implements Runnable {
 
     private GestorHotel gestor;
-    private Consumer<int[]> actualizarDatos;
+    private Consumer<long[]> actualizarDatos;
 
     public ActualizadorIndicadores() {
         gestor = GestorHotel.getInstancia();
     }
 
-    public ActualizadorIndicadores(Consumer<int[]> actualizarDatos) {
+    public ActualizadorIndicadores(Consumer<long[]> actualizarDatos) {
         gestor = GestorHotel.getInstancia();
         this.actualizarDatos = actualizarDatos;
     }
@@ -35,7 +35,7 @@ public class ActualizadorIndicadores implements Runnable {
 
         for (int i = 1; i <= 5; i++) {
 
-            int[] datos;
+            long[] datos;
 
             synchronized (gestor) {
 
@@ -82,12 +82,13 @@ public class ActualizadorIndicadores implements Runnable {
                 System.out.println("Reservas vencidas: " + vencidas);
                 System.out.println("Ingresos esperados: ₡" + ingresos);
 
-                datos = new int[]{
+                datos = new long[]{
                     habitaciones.size(),
                     ocupadas,
                     desocupadas,
                     confirmadas,
-                    vencidas
+                    vencidas,
+                    ingresos
                 };
             }
 
@@ -100,6 +101,7 @@ public class ActualizadorIndicadores implements Runnable {
             if (i < 5) {
                 try {
                     Thread.sleep(1000);
+
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.out.println("Actualizador interrumpido");
