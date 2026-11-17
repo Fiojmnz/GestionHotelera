@@ -36,12 +36,11 @@ public class FrmHotel extends javax.swing.JFrame {
                         procesosEnEjecucion = false;
                     }
 
-                    System.out.println("Los dos procesos finalizaron.");
+                    System.out.println("Los dos procesos finalizaron");
                 });
             }
         };
 
-        // Hilo que supervisa las reservas
         Thread hiloSupervisor = new Thread(() -> {
 
             try {
@@ -61,31 +60,34 @@ public class FrmHotel extends javax.swing.JFrame {
 
         });
 
-        // Hilo que actualiza los indicadores
         Thread hiloIndicadores = new Thread(() -> {
 
             try {
-                Hilos.ActualizadorIndicadores actualizador
-                        = new Hilos.ActualizadorIndicadores(
-                                datos -> javax.swing.SwingUtilities.invokeLater(() -> {
+                Hilos.ActualizadorIndicadores actualizador = new Hilos.ActualizadorIndicadores(
+                        datos -> javax.swing.SwingUtilities.invokeLater(() -> {
 
-                                    txtTotalHabitaciones.setText(
-                                            String.valueOf(datos[0])
-                                    );
+                            txtTotalHabitaciones.setText(
+                                    String.valueOf(datos[0])
+                            );
 
-                                    txtOcupadas.setText(
-                                            String.valueOf(datos[1])
-                                    );
+                            txtOcupadas.setText(
+                                    String.valueOf(datos[1])
+                            );
 
-                                    txtDisponibles.setText(
-                                            String.valueOf(datos[2])
-                                    );
+                            txtDisponibles.setText(
+                                    String.valueOf(datos[2])
+                            );
 
-                                    txtConfirmadas.setText(
-                                            String.valueOf(datos[3])
-                                    );
-                                })
-                        );
+                            txtConfirmadas.setText(
+                                    String.valueOf(datos[3])
+                            );
+
+                            txtIngresosEsperados.setText(
+                                    "₡" + String.format("%,d", datos[5])
+                            );
+
+                        })
+                );
 
                 actualizador.run();
 
@@ -118,15 +120,27 @@ public class FrmHotel extends javax.swing.JFrame {
 
         Modelo.GestorHotel gestor = Modelo.GestorHotel.getInstancia();
 
-        int total = gestor.getHabitaciones().size();
+        java.util.List<Modelo.Habitacion> habitaciones = gestor.getHabitaciones();
+        java.util.List<Modelo.Reserva> reservas = gestor.getReservas();
+
+        int total = habitaciones.size();
         int ocupadas = 0;
         int confirmadas = 0;
 
-        for (Modelo.Reserva r : gestor.getReservas()) {
+        for (Modelo.Habitacion h : habitaciones) {
 
-            if (r.getEstado().equals("Hospedado")) {
-                ocupadas++;
+            for (Modelo.Reserva r : reservas) {
+
+                if (r.getHabitacion().getNumero() == h.getNumero()
+                        && r.getEstado().equals("Hospedado")) {
+
+                    ocupadas++;
+                    break;
+                }
             }
+        }
+
+        for (Modelo.Reserva r : reservas) {
 
             if (r.getEstado().equals("Confirmada")) {
                 confirmadas++;
@@ -139,6 +153,28 @@ public class FrmHotel extends javax.swing.JFrame {
         txtOcupadas.setText(String.valueOf(ocupadas));
         txtDisponibles.setText(String.valueOf(disponibles));
         txtConfirmadas.setText(String.valueOf(confirmadas));
+
+        long ingresos = calcularIngresosRecursivo(reservas, 0);
+
+        txtIngresosEsperados.setText(
+                "₡" + String.format("%,d", ingresos)
+        );
+    }
+
+    private long calcularIngresosRecursivo(
+            java.util.List<Modelo.Reserva> reservas, int indice) {
+
+        if (indice >= reservas.size()) {
+            return 0;
+        }
+
+        long monto = 0;
+
+        if (reservas.get(indice).getEstado().equals("Confirmada")) {
+            monto = reservas.get(indice).getMontoTotal();
+        }
+
+        return monto + calcularIngresosRecursivo(reservas, indice + 1);
     }
 
     /**
@@ -168,8 +204,17 @@ public class FrmHotel extends javax.swing.JFrame {
         btnHabitaciones = new javax.swing.JButton();
         btnSimulacion = new javax.swing.JButton();
         btnDisponibilidad = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txtIngresosEsperados = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         lblTitulo.setText("          SISTEMA DE GESTIÓN HOTELERA");
 
@@ -246,6 +291,8 @@ public class FrmHotel extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("Ingresos esperados:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -266,21 +313,17 @@ public class FrmHotel extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(92, 92, 92)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnHuespedes)
+                            .addComponent(btnDisponibilidad)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(btnDisponibilidad))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(btnHuespedes)
+                                .addGap(9, 9, 9)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtTotalHabitaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                                    .addComponent(txtOcupadas)
-                                    .addComponent(txtDisponibles)
-                                    .addComponent(txtConfirmadas)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(74, 74, 74)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -290,7 +333,18 @@ public class FrmHotel extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnSimulacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btnReservas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(137, 137, 137)))))
+                                .addGap(137, 137, 137))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtTotalHabitaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                                        .addComponent(txtOcupadas)
+                                        .addComponent(txtDisponibles)
+                                        .addComponent(txtConfirmadas))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(txtIngresosEsperados, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(471, 471, 471)))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -320,17 +374,21 @@ public class FrmHotel extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtConfirmadas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtIngresosEsperados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHuespedes)
                     .addComponent(btnHabitaciones)
                     .addComponent(btnReservas))
-                .addGap(42, 42, 42)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDisponibilidad)
                     .addComponent(btnEstadias)
                     .addComponent(btnSimulacion))
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         pack();
@@ -399,6 +457,10 @@ public class FrmHotel extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnHabitacionesActionPerformed
 
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        actualizarIndicadores();
+    }//GEN-LAST:event_formWindowGainedFocus
+
     /**
      * @param args the command line arguments
      */
@@ -446,11 +508,13 @@ public class FrmHotel extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lblNombreRecepcionista;
     private javax.swing.JLabel lblRecepcionista;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtConfirmadas;
     private javax.swing.JTextField txtDisponibles;
+    private javax.swing.JTextField txtIngresosEsperados;
     private javax.swing.JTextField txtOcupadas;
     private javax.swing.JTextField txtTotalHabitaciones;
     // End of variables declaration//GEN-END:variables
