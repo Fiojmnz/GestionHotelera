@@ -12,7 +12,6 @@ import java.time.temporal.ChronoUnit;
  * @author AsusVivobook
  */
 public class Reserva {
-
     private String codigo;
     private Huesped huesped;
     private Habitacion habitacion;
@@ -39,10 +38,12 @@ public class Reserva {
         this.recepcionista = recepcionista;
 
         this.fechaSalidaReal = null;
+
         this.noches = (int) ChronoUnit.DAYS.between(
                 fechaEntrada, fechaSalida);
 
         this.montoTotal = noches * habitacion.getTarifa();
+
         this.estado = "Confirmada";
     }
 
@@ -90,11 +91,44 @@ public class Reserva {
         return recepcionista;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setEstado(String nuevoEstado) {
+
+        boolean transicionValida = false;
+
+        if (estado.equals("Confirmada")
+                && (nuevoEstado.equals("Hospedado")
+                || nuevoEstado.equals("Vencida"))) {
+
+            transicionValida = true;
+        }
+
+        if (estado.equals("Hospedado")
+                && nuevoEstado.equals("Finalizada")) {
+
+            transicionValida = true;
+        }
+
+        if (!transicionValida) {
+            throw new IllegalArgumentException(
+                    "Transición de estado no permitida: "
+                    + estado + " -> " + nuevoEstado);
+        }
+
+        this.estado = nuevoEstado;
     }
 
     public void setFechaSalidaReal(LocalDate fechaSalidaReal) {
+
+        if (!estado.equals("Hospedado")) {
+            throw new IllegalStateException(
+                    "Solo una reserva hospedada puede registrar la salida real");
+        }
+
+        if (fechaSalidaReal == null) {
+            throw new IllegalArgumentException(
+                    "La fecha de salida real no puede ser nula");
+        }
+
         this.fechaSalidaReal = fechaSalidaReal;
     }
 }
