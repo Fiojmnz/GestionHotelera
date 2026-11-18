@@ -87,7 +87,6 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 204));
         jLabel2.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP I3\\Downloads\\icons8-id-48.png")); // NOI18N
         jLabel2.setText("Identificacion:");
 
         txtIdentificacion.setBackground(new java.awt.Color(220, 235, 255));
@@ -96,7 +95,6 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
         txtIdentificacion.setCaretColor(new java.awt.Color(51, 51, 51));
 
         jLabel3.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP I3\\Downloads\\usuario.png")); // NOI18N
         jLabel3.setText("Nombre Completo:");
 
         txtNombre.setBackground(new java.awt.Color(220, 235, 255));
@@ -109,7 +107,6 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP I3\\Downloads\\telefono.png")); // NOI18N
         jLabel4.setText("Telefono:");
 
         txtTelefono.setBackground(new java.awt.Color(220, 235, 255));
@@ -117,7 +114,6 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
         txtTelefono.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP I3\\Downloads\\correo.png")); // NOI18N
         jLabel5.setText("Correo:");
 
         txtCorreo.setBackground(new java.awt.Color(220, 235, 255));
@@ -132,7 +128,6 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
         btnRegistrar.setBackground(new java.awt.Color(0, 204, 51));
         btnRegistrar.setFont(new java.awt.Font("Arial Black", 0, 13)); // NOI18N
         btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistrar.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP I3\\Downloads\\mas.png")); // NOI18N
         btnRegistrar.setText("Registrar Huesped");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,7 +138,6 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
         btnLimpiar.setBackground(new java.awt.Color(255, 0, 0));
         btnLimpiar.setFont(new java.awt.Font("Arial Black", 0, 13)); // NOI18N
         btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
-        btnLimpiar.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP I3\\Downloads\\limpiar.png")); // NOI18N
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,23 +208,16 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(41, 41, 41))))
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(35, 35, 35)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
                     .addComponent(txtIdentificacion)
@@ -251,8 +238,9 @@ public class FrmRegistroHuespedes extends javax.swing.JFrame {
                     .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3))
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
